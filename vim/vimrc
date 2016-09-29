@@ -1,0 +1,102 @@
+" Autoload Plug for plugins
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+
+" If not no problem
+if exists('$TMUX')
+	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif	 
+
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
+Plug 'scrooloose/nerdtree'
+Plug 'altercation/vim-colors-solarized'
+Plug 'bling/vim-airline'
+Plug 'edkolev/tmuxline.vim'
+Plug 'vim-scripts/taglist.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/syntastic'
+"Plug 'valloric/youcompleteme'
+"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+Plug 'kien/ctrlp.vim'
+
+"PlugInstall - to update all plugins :)
+" Add plugins to &runtimepath
+call plug#end()
+
+
+" tabstop, softtabstop, shiftwidth, expandtab - spaces instead tabs
+set ts=4 sts=4 sw=4 noexpandtab
+
+" Mapping of leader (\ by default)
+let mapleader = ","
+
+set background=dark
+syntax enable
+set number		
+set relativenumber		" 0 at the cursor position
+set cursorline          " highlight current line
+filetype indent on      " load filetype-specific indent files
+set wildmenu            " visual autocomplete for command menu
+
+set incsearch           " search as characters are entered
+set hlsearch            " highlight matches
+
+set foldenable          " enable folding
+set foldlevelstart=10   " open most folds by default
+set foldnestmax=10      " 10 nested fold max
+
+" space open/closes folds
+nnoremap <space> za
+
+set foldmethod=indent   " fold based on indent level
+
+nmap <leader>v :tabedit $MYVIMRC<CR>
+
+"colorscheme spacegray
+colorscheme solarized
+
+let g:NERDTreeWinPos = "right"
+let Tlist_Auto_Open = 1
+autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-l> :wincmd l<CR>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+" Causes errors with default checkers
+"let g:syntastic_check_on_open = 1 
+let g:syntastic_check_on_wq = 0
+
+" To check if syntastic is fine :) OFF by me
+"let g:syntastic_debug=1
+let g:syntastic_cpp_checkers = ['gcc']
+
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11'
+"-stdlib=libc++'
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+
+" Use the same symbols as TextMate for tabstops and EOLs
+set listchars=tab:▸\ ,eol:¬
+
+" Use funnier symbols for invisisble chars
+"set listchars=tab:❤\ ,eol:☠
+
+nnoremap <F4> :make<cr>
+nnoremap <F5> :!./main<cr>
